@@ -73,7 +73,7 @@ const ImageModal = ({
         {selectedImage && (
           <>
             <img
-              src={selectedImage.url}
+              src={selectedImage.data}
               alt={selectedImage.name}
               style={{
                 maxWidth: '100%',

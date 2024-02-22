@@ -10,7 +10,7 @@ import { Box, Typography } from '@mui/material';
 const DeleteDialog = ({ open, image, onClose, onConfirmDelete }) => {
   const imagePreview = image ? (
     <img
-      src={image.url}
+      src={image.data}
       alt={image.name}
       style={{
         maxWidth: '100%',

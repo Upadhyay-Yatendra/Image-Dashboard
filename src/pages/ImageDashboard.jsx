@@ -17,9 +17,8 @@ import {
 import ImageModal from "../components/ImageModal";
 import DeleteDialog from "../components/DeleteDialog";
 
-const ImageDashboard = () => {
+const ImageDashboard = ({ images, setImages, onDragEnd }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [images, setImages] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [openImageModal, setOpenImageModal] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -34,7 +33,6 @@ const ImageDashboard = () => {
     const fetchData = async () => {
       const storedImages = getImagesFromLocalStorage();
       await mockApiCall(storedImages);
-      setImages(storedImages);
       setIsLoading(false);
     };
     fetchData();
@@ -128,13 +126,13 @@ const ImageDashboard = () => {
           </Box>
         ) : (
           <ImageList
-            images={images}
+            images={filteredImages}
             onView={handleOpenImageModal}
             onDelete={handleOpenDeleteDialog}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             itemsPerPage={itemsPerPage}
-            // onDragEnd={onDragEnd}
+            onDragEnd={onDragEnd}
           />
         )}
       </Box>

@@ -17,49 +17,19 @@ const ImageList = ({
   currentPage,
   setCurrentPage,
   itemsPerPage,
-  // onDragEnd,
 }) => {
   const handleChangePage = (event, page) => {
     setCurrentPage(page);
   };
-  // console.log(images);
-  // Initial state and useEffect hook to initialize the state from localStorage
+
+  // Initial state and useEffect hook to initialize the state from props
   const [imagesState, setImages] = useState(images || []);
 
-  // Handler function for drag-and-drop
-  const onDragEnd = (result) => {
-    const { source, destination } = result;
-    console.log("On Dragend is called");
-
-    // Check if the drag-and-drop operation was successful and if the destination index is different from the source index
-    if (destination && source.index !== destination.index) {
-      const newImages = Array.from(imagesState);
-      const [removed] = newImages.splice(source.index, 1); // Remove the dragged item from its original position
-      newImages.splice(destination.index, 0, removed); // Insert the dragged item into the new position
-
-      // Update state with the new reordered images array
-      setImages(newImages);
-
-      // Update layout configuration in localStorage
-      updateLayoutConfiguration(newImages);
-    }
-  };
-  // Function to update the layout configuration
-  const updateLayoutConfiguration = (newConfiguration) => {
-    saveLayoutConfiguration(newConfiguration); // Save configuration to localStorage
-    setImages(newConfiguration); // Update state with the new configuration
-    // ****** there is an issue with the above line 
-  };
-  useEffect(() => {
-    // Call updateLayoutConfiguration whenever imagesState changes
-    updateLayoutConfiguration(imagesState);
-  }, [imagesState]);
-  // Update imagesState when the images prop changes
+  // Call updateLayoutConfiguration whenever images prop changes
   useEffect(() => {
     setImages(images || []);
   }, [images]);
-
-  // console.log("\n\n\n", imagesState.length);
+  // console.log("images->", images);
   return (
     <Droppable droppableId="imageList">
       {(provided) => (
@@ -74,21 +44,21 @@ const ImageList = ({
         >
           {imagesState.length > 0 ? (
             <>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} justifyContent="center">
                 {imagesState.map((image, index) => (
                   <Draggable
                     key={image.id}
                     draggableId={image.id.toString()}
                     index={index}
-                    onDragEnd={onDragEnd}
                   >
                     {(provided) => (
                       <Grid
                         item
-                        xs={4}
-                        sm={4}
-                        md={4}
-                        lg={4}
+                        xs={12} // Full width on extra small screens
+                        sm={6} // Half width on small screens
+                        md={4} // One-third width on medium screens
+                        lg={4} // One-fourth width on large screens
+                        xl={4} // One-sixth width on extra large screens (optional)
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -103,6 +73,7 @@ const ImageList = ({
                   </Draggable>
                 ))}
               </Grid>
+
               <Pagination
                 count={Math.ceil(imagesState.length / itemsPerPage)}
                 page={currentPage}
@@ -110,7 +81,7 @@ const ImageList = ({
                 color="primary"
                 sx={{
                   position: "absolute",
-                  bottom: 0,
+                  // bottom: 0,
                   left: "50%",
                   transform: "translateX(-50%)",
                 }}
